@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <div class = "container">
+        <h1>Unsuccessful</h1>
+        <h3>Unfortunately you did not complete all the spots in the form</h3>
+        <h3>Please try again</h3>
+        <a href = "{{ url_for('homepage') }}">
+            <button>Homepage</button>
+        </a>
+    </div>
+{% endblock %}

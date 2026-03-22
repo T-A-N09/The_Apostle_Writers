@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+    {% block body %}
+
+        <div class = "header fade-in">
+            <h1>The Apostle Writers</h1>
+        </div>
+
+        <div class="container fade-in">
+            
+            {% if session.get("user_id")%}
+              <h2>
+                    Hi {{ session["name"] }}
+              </h2>  
+            {% else %}
+                <h2>
+                    I am here to give way for those curious of the apostles that wrote a number of books in our Christian bible
+                </h2>
+            {% endif %}
+            <h3>
+                What we provide is a description of who these people were, how they looked and how they behaved before Jesus. Something that can help us understand them more and possibly relate with them as they had the privilege to be besides our Lord and Saviour, Jesus Christ.
+            </h3>
+        </div>
+        <div class = "container fade-in">
+            <h3>
+                Which apostle are you most curious about?
+            </h3>
+            <a href = "{{ url_for('Matthew') }}" class = "apostle_link">
+                <button>Matthew</button>
+            </a>
+            <a href = "{{ url_for('John') }}" class = "apostle_link">
+                <button>John</button>
+            </a>
+            <a href = "{{ url_for('Peter') }}" class = "apostle_link">
+                <button>Peter</button>
+            </a>
+            <a href = "{{ url_for('Paul') }}" class = "apostle_link">
+                <button>Paul</button>
+            </a>
+        </div>
+        <div class = "header fade-in">
+            {% if session.get("user_id") %}
+                <h3>Welcome back! Enjoy this week's Bible verse.</h3>
+                <a href = "{{ url_for('Logout') }}" class = "apostle_link">
+                    <button>Logout</button>
+                </a>
+            {% else %}
+                <h3>If you wish for weekly bible verses, feel free to sign up</h3>
+                <a href = "{{ url_for('Signup') }}" class = "apostle_link">
+                    <button>Signup</button>
+                </a>
+            {% endif %}
+        </div>
+        <script>
+            document.querySelectorAll("apostle_link").forEach(link => 
+            {
+                link.addEventListener("click", function(e) 
+                {
+                    e.preventDefault();
+                    document.body.classList.add("fade-out");
+
+                    setTimeout
+                    (function() { window.location.href = this.href;}, 2000);
+                });
+            });
+        </script>
+        
+    {% endblock %}

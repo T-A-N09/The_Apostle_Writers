@@ -1,0 +1,135 @@
+import { useState, useEffect } from "react";
+import "../index.css";
+
+import { Link } from "react-router-dom";
+
+function Peter() {
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        fetch("http://localhost:5000/api/user", {
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                    console.log("Peter page user data:", data),
+                    setUser(data.user || null)
+                })
+            .catch(() => setUser(null));
+    }, []);
+    
+    return (
+        <div>
+
+        <Link to = "/Home">
+            <button>Homepage</button>
+        </Link>
+        <Link to = "/Matthew">
+            <button>Matthew</button>
+        </Link>
+        <Link to = "/John">
+            <button>John</button>
+        </Link>
+            <button className = "apostle">Peter</button>
+        <Link to = "/Paul">
+            <button>Paul</button>
+        </Link>
+        {user && user.name ? (
+            <>
+                <Link to = "/Games">
+                    <button>Games</button>
+                </Link>
+            </>
+        ) : (
+        <>
+        </>
+        )}
+
+
+        <div className = "header fade-in">
+            <h1>
+                Apostle: Peter
+            </h1>
+        </div>
+        <div>
+            <h2>
+                Brief description
+            </h2>
+            <h4>
+                If Matthew was the "Record Keeper" and John was the "Beloved," Peter was the "Rock." He is arguably the most relatable of the apostles because he was a man of extremes: intensely loyal, deeply flawed, and famously impulsive.
+            </h4>
+        </div>
+        <div className = "Right_align">
+            <h2>
+                Who he was
+            </h2>
+            <section className = "row">
+                    <h4>
+                        Peter (originally named Simon) lived in Bethsaida and later Capernaum.
+                        The Blue-Collar Leader: He was a professional fisherman, a gritty and physically demanding job. He was a partner with his brother Andrew and the "Sons of Thunder" (James and John).
+                        Family Man: Peter is one of the few apostles we know for certain was married, as the Gospels mention Jesus healing his mother-in-law.
+                        The Spokesman: In almost every list of the apostles, Peter’s name is first. He acted as the unofficial foreman of the group, often being the one to speak up (even when he shouldn't have).
+                    </h4>
+            </section>
+        </div>
+        <div>
+            <h2>
+                How he was
+            </h2>
+            <h4>
+                Peter’s personality was like a roller coaster. He was the "man of action" who often acted before he thought.
+                <ul>
+                    <li>
+                        Brave but Brash: He was the only one with the courage to step out of a boat onto stormy water to walk toward Jesus, but also the one who immediately panicked and began to sink.
+                    </li>
+                    <li>
+                        The "Foot-in-Mouth" Disciple: He famously tried to correct Jesus, telling Him He didn't have to die—to which Jesus famously replied, "Get behind me, Satan!"
+                    </li>
+                    <li>
+                        A Heart of Gold: Despite his mistakes, his love for Jesus was raw and unfiltered. He was the first to declare, "You are the Christ," a moment that led Jesus to give him the name Peter (Petros, meaning "Rock").
+                    </li>
+                </ul>
+            </h4>
+        </div>
+        <div className = "Right_align">
+            <h2>
+                How he looked
+            </h2>
+            <h4>
+                Historical context and centuries of tradition give us a very specific image of Peter:
+                <ul>
+                    <li>
+                        Physically Strong: Decades of hauling heavy, wet nets onto wooden boats would have made him broad-shouldered and physically imposing.
+                    </li>
+                    <li>
+                        The "Silver Hair": In traditional art, Peter is almost always depicted with short, curly grey hair and a rounded grey beard. This contrasts with the younger, beardless John.
+                    </li>
+                    <li>
+                        The Keys: He is almost always shown holding a set of keys, symbolizing the "Keys to the Kingdom" mentioned in Matthew 16:19.
+                    </li>
+               </ul>
+            </h4>
+        </div>
+        <div>
+            <h2>
+                His Journey with Jesus
+            </h2>
+            <h4>
+                Jesus tells Peter to cast his nets after a night of catching nothing. The nets nearly break from the fish. Peter falls to his knees, saying, "Go away from me, Lord; I am a sinful man." The ultimate metaphor for Peter’s life: incredible faith followed by immediate distraction and a rescue by Jesus. During Jesus' trial, the man who promised to "die for Him" got scared and denied even knowing Jesus three times before the rooster crowed. After the Resurrection, Jesus met Peter by the shore and asked him "Do you love me?" three times—once for every denial—effectively "resetting" his calling. The "coward" who hid during the Crucifixion became the man who stood in the middle of Jerusalem and preached to thousands. 
+            </h4>
+        </div>
+        <div className = "interesting">
+            <h2>
+                Interesting Fact 
+            </h2>
+            <h4>
+                Tradition tells us that Peter eventually traveled to Rome. When he was sentenced to death by the Emperor Nero, he reportedly requested to be crucified upside down, because he felt he was not worthy to die in the same manner as Jesus.
+                Peter's story is the "comeback story" of the Bible. He proved that you don't have to be perfect to be a leader; you just have to keep showing up.
+            </h4>
+        </div>
+
+        </div>
+    )
+}
+
+export default Peter

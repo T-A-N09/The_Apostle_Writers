@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+    {% block body %}
+        <div class = "center-page">
+            <form action = "/Feedback" method = "POST" class = "middle">
+                <h2>
+                    Sign Up Form
+                </h2>
+                <div>
+                    First Name
+                </div>
+                <input name = "name" type = "text">
+                <div>
+                    Last Name
+                </div>
+                <input name = "surname" type = "text">
+                <div>
+                    Email
+                </div>
+                <input name = "email" type="email">
+
+                <button type = "submit">Sign up</button>
+            </form>
+        </div>
+
+    {% endblock %}

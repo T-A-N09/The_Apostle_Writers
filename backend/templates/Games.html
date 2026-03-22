@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+    {% block body %}
+
+        <a href = "{{ url_for('homepage') }}">
+            <button>Homepage</button>
+        </a>
+        <a href = "{{ url_for('Matthew') }}">
+            <button>Matthew</button>
+        </a>
+        <a href = "{{ url_for('John') }}">
+            <button>John</button>
+        </a>
+        <a href = "{{ url_for('Peter') }}">
+            <button>Peter</button>
+        </a>
+        <a href = "{{ url_for('Paul') }}">
+            <button>Paul</button>
+        </a>
+        <button class = "apostle">Games</button>
+
+        <div class = "header fade-in">
+            <h1>
+                Games
+            </h1>
+            <h2>
+                A fun way to learn more
+            </h2>
+        </div>
+        <section>
+            <h2>
+                Trivia Questions 
+            </h2>
+            <a href = "{{ url_for('Trivia') }}">
+                <button>Play</button>
+            </a>
+        </section>
+        <section>
+            <h2>
+                Hangman Game 
+            </h2>
+            <a href = "{{ url_for('Hangman') }}">
+                <button>Play</button>
+            </a>
+
+        </section>
+
+    {% endblock %}
