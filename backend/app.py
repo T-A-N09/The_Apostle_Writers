@@ -3,21 +3,16 @@ from flask_cors import CORS
 import sqlite3
 import os
 
-app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
+app = Flask(__name__, static_folder='/frontend/build', static_url_path='/')
 app.secret_key = "a_very_secret_key_here"
 CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
-port = int(os.environ.get("PORT", 10000))
-app.run(host="0.0.0.0", port=port)
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "the_apostles.db")
 
 #GItHub
 
 # Serve React index.html
-@app.route('/')
-def serve():
-    return send_from_directory(app.static_folder, 'index.html')
 
 # Serve other routes/files
 @app.errorhandler(404)
@@ -296,10 +291,6 @@ def reset_hangman_progress():
 
 #User profiling
 
-@app.route("/")
-def home():
-    return "Hello, world!"
-
 @app.route("/api/user")
 def user():
     if "user_id" in session:
@@ -363,9 +354,14 @@ def signup():
 
 #Flask code
     
-@app.route("/")
-def homepage():
-    return render_template("Apostles.html")
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve(path):
+    # If the requested path exists in frontend/build, serve it
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    # Otherwise, serve React index.html
+    return send_from_directory(app.static_folder, "index.html")
 
 @app.route("/Matthew.html")
 def Matthew():
@@ -440,7 +436,3 @@ def Feedback():
         return redirect("/")
     else:
         return redirect("/Login.html")
-
-if __name__ == "__main__":
-    init_db()
-    app.run(debug=True)
