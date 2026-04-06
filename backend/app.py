@@ -3,7 +3,7 @@ from flask_cors import CORS
 import sqlite3
 import os
 
-app = Flask(__name__, static_folder='/frontend/build', static_url_path='/')
+app = Flask(__name__,  static_folder=os.path.join(os.getcwd(), "frontend/build"), static_url_path='/')
 app.secret_key = "a_very_secret_key_here"
 CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
@@ -357,10 +357,9 @@ def signup():
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def serve(path):
-    # If the requested path exists in frontend/build, serve it
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+    file_path = os.path.join(app.static_folder, path)
+    if path != "" and os.path.exists(file_path):
         return send_from_directory(app.static_folder, path)
-    # Otherwise, serve React index.html
     return send_from_directory(app.static_folder, "index.html")
 
 @app.route("/Matthew.html")
