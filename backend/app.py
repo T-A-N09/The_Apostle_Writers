@@ -296,6 +296,10 @@ def reset_hangman_progress():
 
 #User profiling
 
+@app.route("/")
+def home():
+    return "Hello, world!"
+
 @app.route("/api/user")
 def user():
     if "user_id" in session:
