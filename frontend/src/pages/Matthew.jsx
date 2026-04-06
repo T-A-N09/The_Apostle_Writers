@@ -21,7 +21,7 @@ function Matthew() {
 
     return (
         <div>
-        <Link to = "/Home">
+        <Link to = "/">
             <button>Homepage</button>
         </Link>
         <button className = "apostle">Matthew</button>

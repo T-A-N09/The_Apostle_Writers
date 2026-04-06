@@ -7,6 +7,8 @@ app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
 app.secret_key = "a_very_secret_key_here"
 CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
+port = int(os.environ.get("PORT", 10000))
+app.run(host="0.0.0.0", port=port)
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "the_apostles.db")
 

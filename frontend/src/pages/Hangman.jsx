@@ -225,7 +225,7 @@ function Hangman() {
         <div>
 
             {/* Navigation */}
-            <Link to="/Home"><button>Homepage</button></Link>
+            <Link to="/"><button>Homepage</button></Link>
             <Link to="/Games"><button>Games</button></Link>
 
             <div className="header fade-in">
