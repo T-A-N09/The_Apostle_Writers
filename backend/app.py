@@ -3,7 +3,10 @@ from flask_cors import CORS
 import sqlite3
 import os
 
-app = Flask(__name__,  static_folder="..frontend/dist", static_url_path='/')
+app = Flask(__name__, 
+    static_folder=os.path.join(os.path.dirname(__file__), "../frontend/dist"),
+    static_url_path='/')
+
 app.secret_key = "a_very_secret_key_here"
 CORS(app, supports_credentials=True, origins=[
     "http://localhost:5173",
