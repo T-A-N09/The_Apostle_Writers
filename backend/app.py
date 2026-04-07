@@ -3,7 +3,7 @@ from flask_cors import CORS
 import sqlite3
 import os
 
-app = Flask(__name__,  static_folder=os.path.join(os.getcwd(), "frontend/build"), static_url_path='/')
+app = Flask(__name__,  static_folder="..frontend/", static_url_path='/')
 app.secret_key = "a_very_secret_key_here"
 CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
@@ -12,12 +12,6 @@ DB_PATH = os.path.join(os.path.dirname(__file__), "the_apostles.db")
 
 #GItHub
 
-# Serve React index.html
-
-# Serve other routes/files
-@app.errorhandler(404)
-def not_found(e):
-    return send_from_directory(app.static_folder, 'index.html')
 
 
 
