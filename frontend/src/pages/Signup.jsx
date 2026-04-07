@@ -9,13 +9,18 @@ function Signup() {
     const [surname, setSurname] = useState("")
     const [email, setEmail] = useState("")
 
-    const [error, setError] = useState("")
+     const [toast, setToast] = useState("")
 
     const navigate = useNavigate()
 
+    const showToast = (msg) => {
+        setToast(msg);
+        setTimeout(() => setToast(""), 3000);  // disappears after 3s
+    };
+
     const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setToast("");
 
     try{
     const response = await fetch("http://localhost:5000/signup", {
@@ -32,18 +37,17 @@ function Signup() {
     })
     
     const data = await response.json()
-    console.log(data)
 
-    if(!response.ok) {
-        setError(data.error || "Signup failed")
+    if (!response.ok) {
+        showToast(data.error || "Signup failed")  // ← triggers toast
         return
     }
 
-    navigate("/Home")
+    navigate("/")
     
     } catch(err) {
         console.error(err)
-        setError("Something went wrong. Please try again")
+        setToast("Something went wrong. Please try again")
     }
     };
 
@@ -78,6 +82,24 @@ function Signup() {
 
                     <button type = "submit">Sign up</button>
                 </form>
+
+                {toast && (
+                <div style={{
+                    position: "fixed",
+                    bottom: "24px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    background: "#2C2C2A",
+                    color: "#D3D1C7",
+                    padding: "10px 20px",
+                    borderRadius: "8px",
+                    fontSize: "14px",
+                    zIndex: 1000,
+                }}>
+                    {toast}
+                </div>
+                )}
+
             </div>
 
         </div>

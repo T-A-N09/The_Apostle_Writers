@@ -26,36 +26,6 @@ def not_found(e):
 #React backend code
 
 
-
-
-
-#OTP system
-
-#import random
-
-#def generate_otp():
-#    return str(random.randint(100000, 999999))  # 6-digit OTP
-
-#import smtplib
-#from email.mime.text import MIMEText
-
-#EMAIL_ADDRESS = "tiyanearnold@gmail.com"
-#EMAIL_PASSWORD = "your_app_password"  # NOT your real password
-
-#def send_otp_email(recipient_email, otp):
-#    msg = MIMEText(f"Your OTP is: {otp}")
-#    msg["Subject"] = "Your Verification Code"
-#    msg["From"] = EMAIL_ADDRESS
-#    msg["To"] = recipient_email
-
-#    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-#        server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-#        server.send_message(msg)
-
-
-
-
-
 #Games
 
 # ─────────────────────────────────────────────
@@ -81,7 +51,6 @@ def get_db():
 #   users        — stores everyone who has signed up
 #   trivia_progress  — stores each user's trivia question index and score
 #   hangman_progress — stores each user's current hangman word and guesses
-# ─────────────────────────────────────────────
 def init_db():
     db = get_db()
     cursor = db.cursor()
@@ -435,3 +404,7 @@ def Feedback():
         return redirect("/")
     else:
         return redirect("/Login.html")
+
+if __name__ == "__main__":
+    init_db() 
+    app.run(debug=True)
