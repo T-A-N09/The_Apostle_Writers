@@ -3,9 +3,11 @@ from flask_cors import CORS
 import sqlite3
 import os
 
-app = Flask(__name__,  static_folder="..frontend/", static_url_path='/')
+app = Flask(__name__,  static_folder="..frontend/dist", static_url_path='/')
 app.secret_key = "a_very_secret_key_here"
-CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
+CORS(app, supports_credentials=True, origins=[
+    "http://localhost:5173",
+    "https://the-apostle-writers.onrender.com"])
 
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "the_apostles.db")
@@ -399,6 +401,8 @@ def Feedback():
     else:
         return redirect("/Login.html")
 
+init_db()
+
 if __name__ == "__main__":
-    init_db() 
+     
     app.run(debug=True)
