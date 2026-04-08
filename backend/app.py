@@ -2,15 +2,19 @@ from flask import Flask, render_template, request, jsonify, redirect, session, g
 from flask_cors import CORS
 import sqlite3
 import os
+import secrets
 
 app = Flask(__name__, 
     static_folder=os.path.join(os.path.dirname(__file__), "../frontend/dist"),
     static_url_path='/')
 
-app.secret_key = "a_very_secret_key_here"
+app.secret_key = "paste_the_generated_value_here"
 CORS(app, supports_credentials=True, origins=[
     "http://localhost:5173",
     "https://the-apostle-writers.onrender.com"])
+
+app.config["SESSION_COOKIE_SAMESITE"] = "None"
+app.config["SESSION_COOKIE_SECURE"] = True
 
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "the_apostles.db")

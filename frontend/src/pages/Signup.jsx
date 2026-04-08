@@ -23,7 +23,7 @@ function Signup() {
     setToast("");
 
     try{
-    const response = await fetch("http://localhost:5000/signup", {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/signup`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
