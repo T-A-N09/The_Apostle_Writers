@@ -314,6 +314,38 @@ def signup():
 
     return jsonify({"message": "Signup successful"})
 
+
+@app.route("/login" , methods = ["POST"])
+def login():
+    data = request.get_json()
+
+    name = data.get("name")
+    email = data.get("email")
+
+    if not name or not email:
+        return jsonify({"error": "Missing fields"}), 400
+
+    db = get_db()
+    cursor = db.cursor()
+ 
+    # Check if email already registered
+    cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+    existing = cursor.fetchone()
+    if not existing:
+        db.close()
+        return jsonify({"error": "Email not registered"}), 400
+ 
+    # Fetch the user to get their real ID
+    cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+    new_user = cursor.fetchone()
+    db.close()
+ 
+    # Save their real ID and name into the session
+    session["user_id"] = new_user["id"]
+    session["name"]    = new_user["name"]
+
+    return jsonify({"message": "Login successful"})
+
 #End of React
 
 

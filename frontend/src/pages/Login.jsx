@@ -4,12 +4,11 @@ import "../index.css";
 
 import { Link } from "react-router-dom";
 
-function Signup() {
-    const [name, setName] = useState("");
-    const [surname, setSurname] = useState("")
+function Login() {
+    const [name, setSurname] = useState("")
     const [email, setEmail] = useState("")
 
-     const [toast, setToast] = useState("")
+    const [toast, setToast] = useState("")
 
     const navigate = useNavigate()
 
@@ -23,7 +22,7 @@ function Signup() {
     setToast("");
 
     try{
-    const response = await fetch("http://localhost:5000/signup", {
+    const response = await fetch("http://localhost:5000/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -31,7 +30,6 @@ function Signup() {
         credentials: "include",
         body: JSON.stringify({
             name,
-            surname,
             email
         })
     })
@@ -39,7 +37,7 @@ function Signup() {
     const data = await response.json()
 
     if (!response.ok) {
-        showToast(data.error || "Signup failed")  // ← triggers toast
+        showToast(data.error || "Login failed")  // ← triggers toast
         return
     }
 
@@ -57,21 +55,14 @@ function Signup() {
             <div className = "center-page">
                 <form onSubmit={handleSubmit} className = "middle">
                     <h2>
-                        Sign Up Form
+                        Log In Form
                     </h2>
                     <div>
                         First Name
                     </div>
-                    <input 
-                        type = "text" value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        />
-                    <div>
-                        Last Name
-                    </div>
                     <input
                         type="text"
-                        value={surname}
+                        value={name}
                         onChange={(e) => setSurname(e.target.value)}
                     />
                     <div>
@@ -80,14 +71,7 @@ function Signup() {
                     <input type="email" value={email}
                 onChange={(e) => setEmail(e.target.value)}/>
 
-                    <button type = "submit">Sign up</button>
-
-                    <div>If you already have an account</div>
-                    <div>
-                        <Link to = "/Login">
-                            <button>Login</button>
-                        </Link>
-                    </div>
+                    <button type = "submit">Log in</button>
                 </form>
 
                 {toast && (
@@ -108,9 +92,8 @@ function Signup() {
                 )}
 
             </div>
-
         </div>
     )
 }
 
-export default Signup
+export default Login

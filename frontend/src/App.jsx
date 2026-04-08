@@ -10,6 +10,8 @@ import Games from "./pages/Games"
 import Signup from "./pages/Signup"
 import Trivia from "./pages/Trivia"
 import Hangman from "./pages/Hangman"
+import Login from "./pages/Login"
+
 import Intro from "./pages/Intro"
 
 import './Apostles.css';
@@ -23,6 +25,7 @@ function App() {
       <Routes>  
         <Route path="/" element={<Home user={user} />} />
         <Route path="/Signup" element={<Signup setUser={setUser} />} />
+        <Route path="/Login" element={<Login setUser={setUser} />} />
         <Route path="/Matthew" element={<Matthew />} />
         <Route path="/John" element={<John />} />
         <Route path="/Peter" element={<Peter />} />

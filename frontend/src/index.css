@@ -438,3 +438,22 @@ a
     cursor: not-allowed;
     opacity: 0.75;
 }
+
+/**/
+
+@media (max-width: 768px) {
+  p {
+    text-align: left;        /* removes the stretched justify */
+    padding: 0 1rem;         /* adds breathing room on the sides */
+    width: 100%;             /* uses full available width */
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+}

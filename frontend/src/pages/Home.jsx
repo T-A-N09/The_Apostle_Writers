@@ -59,7 +59,8 @@ function Home() {
             <h3>
                 Which apostle are you most curious about?
             </h3>
-
+            
+            <div className="button-group">
             <Link to ="/Matthew" className="apostle_link">
             <button>Matthew</button>
             </Link>
@@ -72,7 +73,8 @@ function Home() {
             <Link to = "/Paul" className="apostle_link">
                 <button>Paul</button>
             </Link>
-            
+            </div>
+
         </div>
 
         <div className = "header fade-in">
