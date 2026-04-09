@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, jsonify, redirect, session, g, send_from_directory
 from flask_cors import CORS
-import psycopg2
-import psycopg2.extras
+import sqlite3
 import os
+import secrets
 
 app = Flask(__name__, 
     static_folder=os.path.join(os.path.dirname(__file__), "../frontend/dist"),
@@ -16,7 +16,8 @@ CORS(app, supports_credentials=True, origins=[
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = True
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
+
+DB_PATH = os.path.join(os.path.dirname(__file__), "the_apostles.db")
 
 #GItHub
 
@@ -38,7 +39,8 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 # Always call db.close() when done to avoid locking the file.
 # ─────────────────────────────────────────────
 def get_db():
-    db = psycopg2.connect(DATABASE_URL)
+    db = sqlite3.connect(DB_PATH)
+    db.row_factory = sqlite3.Row
     return db
  
  
@@ -59,7 +61,7 @@ def init_db():
     # Users table — one row per person who signs up
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
-            id      SERIAL PRIMARY KEY,
+            id      INTEGER PRIMARY KEY AUTOINCREMENT,
             name    TEXT NOT NULL,
             surname TEXT NOT NULL,
             email   TEXT NOT NULL UNIQUE
@@ -72,7 +74,7 @@ def init_db():
     # completed: 1 if they finished the quiz, 0 if still in progress
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS trivia_progress (
-            id               SERIAL PRIMARY KEY,
+            id               INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id          INTEGER NOT NULL UNIQUE,
             current_question INTEGER DEFAULT 0,
             score            INTEGER DEFAULT 0,
@@ -86,7 +88,7 @@ def init_db():
     # guessed_letters: a comma-separated string e.g. "A,P,T,E"
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS hangman_progress (
-            id               SERIAL PRIMARY KEY,
+            id               INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id          INTEGER NOT NULL UNIQUE,
             current_word     TEXT DEFAULT '',
             guessed_letters  TEXT DEFAULT '',
@@ -104,9 +106,9 @@ def get_trivia_progress():
         return jsonify({"error": "Not logged in"}), 401
  
     db = get_db()
-    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cursor = db.cursor()
     cursor.execute(
-        "SELECT * FROM trivia_progress WHERE user_id = %s",
+        "SELECT * FROM trivia_progress WHERE user_id = ?",
         (session["user_id"],)
     )
     row = cursor.fetchone()
@@ -145,7 +147,7 @@ def save_trivia_progress():
     # This way we always have exactly one progress row per user.
     cursor.execute("""
         INSERT INTO trivia_progress (user_id, current_question, score, completed)
-        VALUES (%s, %s, %s, %s)
+        VALUES (?, ?, ?, ?)
         ON CONFLICT(user_id) DO UPDATE SET
             current_question = excluded.current_question,
             score            = excluded.score,
@@ -163,9 +165,9 @@ def reset_trivia_progress():
         return jsonify({"error": "Not logged in"}), 401
  
     db = get_db()
-    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cursor = db.cursor()
     cursor.execute(
-        "DELETE FROM trivia_progress WHERE user_id = %s",
+        "DELETE FROM trivia_progress WHERE user_id = ?",
         (session["user_id"],)
     )
     db.commit()
@@ -187,9 +189,9 @@ def get_hangman_progress():
         return jsonify({"error": "Not logged in"}), 401
  
     db = get_db()
-    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cursor = db.cursor()
     cursor.execute(
-        "SELECT * FROM hangman_progress WHERE user_id = %s",
+        "SELECT * FROM hangman_progress WHERE user_id = ?",
         (session["user_id"],)
     )
     row = cursor.fetchone()
@@ -226,7 +228,7 @@ def save_hangman_progress():
     cursor = db.cursor()
     cursor.execute("""
         INSERT INTO hangman_progress (user_id, current_word, guessed_letters)
-        VALUES (%s, %s, %s)
+        VALUES (?, ?, ?)
         ON CONFLICT(user_id) DO UPDATE SET
             current_word    = excluded.current_word,
             guessed_letters = excluded.guessed_letters
@@ -246,7 +248,7 @@ def reset_hangman_progress():
     db = get_db()
     cursor = db.cursor()
     cursor.execute(
-        "DELETE FROM hangman_progress WHERE user_id = %s",
+        "DELETE FROM hangman_progress WHERE user_id = ?",
         (session["user_id"],)
     )
     db.commit()
@@ -289,7 +291,7 @@ def signup():
         return jsonify({"error": "Missing fields"}), 400
 
     db = get_db()
-    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cursor = db.cursor()
  
     # Check if email already registered
     cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
@@ -328,7 +330,7 @@ def login():
         return jsonify({"error": "Missing fields"}), 400
 
     db = get_db()
-    cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cursor = db.cursor()
  
     # Check if email already registered
     cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
@@ -338,7 +340,7 @@ def login():
         return jsonify({"error": "Email not registered"}), 400
  
     # Fetch the user to get their real ID
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+    cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
     new_user = cursor.fetchone()
     db.close()
  
@@ -412,17 +414,20 @@ def Feedback():
         if not name or not surname or not email:
             return render_template("failure.html")
             
-        db = get_db()
-        cursor = db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
- 
-        cursor.execute(
-            "INSERT INTO users (name, surname, email) VALUES (%s, %s, %s)",
-            (name, surname, email)
-        )
+        db_path = os.path.abspath("the_apostles.db")
+        print("Database path:", db_path)
+
+        db = sqlite3.connect("the_apostles.db", check_same_thread=False)
+        db.row_factory = sqlite3.Row
+        cursor = db.cursor()
+
+        cursor.execute( "INSERT INTO users (name, surname, email) VALUES (?, ?, ?)",(name, surname, email))
         db.commit()
+
+        print("Submitting:", name, surname, email)
         
         
-        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+        cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
         rows = cursor.fetchall()
         db.close()
 
