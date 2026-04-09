@@ -9,14 +9,14 @@ function Home() {
     const location = useLocation()
 
     const handleLogout = async () => {
-        await fetch("http://localhost:5000/api/logout", {
+        await fetch(`${import.meta.env.VITE_API_URL}/api/logout`, {
             credentials: "include"
         })
         setUser(null)
     }
 
     useEffect(() => {
-    fetch("http://localhost:5000/api/user", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/user`, {
         credentials: "include"
     })
     .then(res => {

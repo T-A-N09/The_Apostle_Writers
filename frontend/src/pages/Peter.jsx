@@ -7,7 +7,7 @@ function Peter() {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:5000/api/user", {
+        fetch(`${import.meta.env.VITE_API_URL}/api/user`, {
             credentials: "include"
         })
             .then(res => res.json())
