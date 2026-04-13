@@ -26,6 +26,21 @@ DB_PATH = os.path.join(os.path.dirname(__file__), "the_apostles.db")
 
 
 
+
+
+#Supabase backend code
+
+from supabase import create_client
+from dotenv import load_dotenv
+
+load_dotenv()
+
+url = os.getenv("SUPABASE_URL")
+key = os.getenv("SUPABASE_KEY")
+
+supabase = create_client(url, key)
+
+
 #React backend code
 
 
@@ -261,6 +276,19 @@ def reset_hangman_progress():
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+from werkzeug.security import generate_password_hash, check_password_hash
+
 #User profiling
 
 @app.route("/api/user")
@@ -285,32 +313,30 @@ def signup():
 
     name = data.get("name")
     surname = data.get("surname")
-    email = data.get("email")
+    username = data.get("username")
+    password = data.get("password")
 
-    if not name or not surname or not email:
+    if not name or not surname or not username or not password:
         return jsonify({"error": "Missing fields"}), 400
 
-    db = get_db()
-    cursor = db.cursor()
+    # Check if username already registered
+    existing = supabase.table("users").select("*").eq("username", username).execute()
+
+    if existing.data:
+        return jsonify({"error": "Username already exists"}), 400
  
-    # Check if email already registered
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
-    existing = cursor.fetchone()
-    if existing:
-        db.close()
-        return jsonify({"error": "Email already registered"}), 400
+    # Hash the password before storing it
+    hashed_password = generate_password_hash(password)
+
+    # Insert new user into Supabase
+    response = supabase.table("users").insert({
+        "name":     name,
+        "surname":  surname,
+        "username": username,
+        "password": hashed_password
+    }).execute()
  
-    # Insert new user into the database
-    cursor.execute(
-        "INSERT INTO users (name, surname, email) VALUES (%s, %s, %s)",
-        (name, surname, email)
-    )
-    db.commit()
- 
-    # Fetch the newly created user to get their real ID
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
-    new_user = cursor.fetchone()
-    db.close()
+    new_user = response.data[0]
  
     # Save their real ID and name into the session
     session["user_id"] = new_user["id"]
@@ -323,26 +349,25 @@ def signup():
 def login():
     data = request.get_json()
 
-    name = data.get("name")
-    email = data.get("email")
+    username = data.get("username")
+    password = data.get("password")
 
-    if not name or not email:
+    if not username or not email:
         return jsonify({"error": "Missing fields"}), 400
 
     db = get_db()
     cursor = db.cursor()
  
-    # Check if email already registered
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
-    existing = cursor.fetchone()
-    if not existing:
-        db.close()
-        return jsonify({"error": "Email not registered"}), 400
+    # Fetch user by username
+    response = supabase.table("users").select("*").eq("username", username).execute()
+    if not response.data:
+        return jsonify({"error": "Username OR Password is incorrect"}), 400
  
-    # Fetch the user to get their real ID
-    cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
-    new_user = cursor.fetchone()
-    db.close()
+    user = response.data[0]
+ 
+    # Check the hashed password
+    if not check_password_hash(user["password"], password):
+        return jsonify({"error": "Username OR Password is incorrect"}), 400
  
     # Save their real ID and name into the session
     session["user_id"] = new_user["id"]

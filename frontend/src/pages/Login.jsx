@@ -5,8 +5,8 @@ import "../index.css";
 import { Link } from "react-router-dom";
 
 function Login() {
-    const [name, setSurname] = useState("")
-    const [email, setEmail] = useState("")
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
 
     const [toast, setToast] = useState("")
 
@@ -29,8 +29,8 @@ function Login() {
         }, 
         credentials: "include",
         body: JSON.stringify({
-            name,
-            email
+            username,
+            password
         })
     })
     
@@ -58,18 +58,18 @@ function Login() {
                         Log In Form
                     </h2>
                     <div>
-                        First Name
+                        Username
                     </div>
                     <input
                         type="text"
-                        value={name}
-                        onChange={(e) => setSurname(e.target.value)}
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                     />
                     <div>
-                        Email
+                        Password
                     </div>
-                    <input type="email" value={email}
-                onChange={(e) => setEmail(e.target.value)}/>
+                    <input type="password" value={password}
+                        onChange={(e) => setPassword(e.target.value)}/>
 
                     <button type = "submit">Log in</button>
                 </form>

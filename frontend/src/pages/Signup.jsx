@@ -7,7 +7,8 @@ import { Link } from "react-router-dom";
 function Signup() {
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("")
-    const [email, setEmail] = useState("")
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
 
      const [toast, setToast] = useState("")
 
@@ -32,7 +33,7 @@ function Signup() {
         body: JSON.stringify({
             name,
             surname,
-            email
+            password
         })
     })
     
@@ -53,7 +54,11 @@ function Signup() {
 
     return (
         <div>
-
+            <div className="container">
+                The sign up form is to help me know many users are actually participating in my website.
+                Knowing that there are users engaging would encourage me to make it better for learning like adding other features in it as what you will find after signing up.
+                I appreciate you wanting to know Jesus, and I will make it as worth while for you as possible. You will find the sign up form below:
+            </div>
             <div className = "center-page">
                 <form onSubmit={handleSubmit} className = "middle">
                     <h2>
@@ -75,17 +80,23 @@ function Signup() {
                         onChange={(e) => setSurname(e.target.value)}
                     />
                     <div>
-                        Email
+                        Username
                     </div>
-                    <input type="email" value={email}
-                onChange={(e) => setEmail(e.target.value)}/>
+                    <input 
+                        type = "text" value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        />
+                    <div>
+                        Password
+                    </div>
+                    <input type="password" value={password}
+                onChange={(e) => setPassword(e.target.value)}/>
 
                     <button type = "submit">Sign up</button>
 
-                    <div>If you already have an account</div>
-                    <div>
+                    <div>If you already have an account. Click
                         <Link to = "/Login">
-                            <button>Login</button>
+                            "Login"
                         </Link>
                     </div>
                 </form>
