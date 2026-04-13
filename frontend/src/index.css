@@ -140,6 +140,19 @@ h4
     transition: 0.3s ease;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+/*Interestin css*/
+
 .interesting
 {
     background-color: rgb(165, 115, 58);
@@ -155,22 +168,15 @@ h4
     text-align: center;
 }
 
-.image img
+.interesting h4
 {
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: cover;
+    background: rgb(160, 129, 93);
+    width: auto;
 }
 
 a
 {
     text-decoration: none;
-}
-
-.text, .image
-{
-    flex: 1;
 }
 
 .row 
@@ -180,11 +186,19 @@ a
     gap: 15px;
 }
 
-.interesting h4
-{
-    background: rgb(160, 129, 93);
-    width: auto;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*The right workers*/
 .Right_align
@@ -210,6 +224,19 @@ a
     justify-content: flex-end;
     text-align: justify;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*The middle workers*/
 .middle
@@ -267,6 +294,18 @@ a
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+/*Games*/
 
 /*Trivia game*/
 
@@ -402,6 +441,21 @@ a
     padding-bottom: 40px;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*Keys*/
+
 /* Default key button */
 .key-btn {
     width: 40px;
@@ -439,21 +493,44 @@ a
     opacity: 0.75;
 }
 
-/**/
 
-@media (max-width: 768px) {
-  p {
-    text-align: left;        /* removes the stretched justify */
-    padding: 0 1rem;         /* adds breathing room on the sides */
-    width: 100%;             /* uses full available width */
-    box-sizing: border-box;
-  }
-}
 
-@media (max-width: 768px) {
-  .container {
-    width: 95%;
-    padding: 1rem;
-    box-sizing: border-box;
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*For Mobile*/
+
+@media (max-width: 700px) {
+
+    .Right_align
+    {
+        text-align: center;
+        margin-right: auto;
+    }
+
+    .Right_align h2, h2
+    {
+        text-align: center;
+    }
+
+    
+    h4, .interesting h4, .Right_align h4 {
+        width: 100% !important;
+    }
+
+    .Right_align ul
+    {
+        justify-content: center;
+        text-align: center;
+    }
 }
