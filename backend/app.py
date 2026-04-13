@@ -363,15 +363,15 @@ def login():
     if not response.data:
         return jsonify({"error": "Username OR Password is incorrect"}), 400
  
-    new_user = response.data[0]
+    user_data = response.data[0]
  
     # Check the hashed password
-    if not check_password_hash(user["password"], password):
+    if not check_password_hash(user_data["password"], password):
         return jsonify({"error": "Username OR Password is incorrect"}), 400
  
     # Save their real ID and name into the session
-    session["user_id"] = new_user["id"]
-    session["name"]    = new_user["name"]
+    session["user_id"] = user_data["id"]
+    session["name"]    = user_data["name"]
 
     return jsonify({"message": "Login successful"})
 
