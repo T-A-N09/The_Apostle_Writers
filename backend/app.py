@@ -352,7 +352,7 @@ def login():
     username = data.get("username")
     password = data.get("password")
 
-    if not username or not email:
+    if not username or not password:
         return jsonify({"error": "Missing fields"}), 400
 
     db = get_db()
@@ -363,7 +363,7 @@ def login():
     if not response.data:
         return jsonify({"error": "Username OR Password is incorrect"}), 400
  
-    user = response.data[0]
+    new_user = response.data[0]
  
     # Check the hashed password
     if not check_password_hash(user["password"], password):

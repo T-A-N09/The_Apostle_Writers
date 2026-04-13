@@ -33,6 +33,7 @@ function Signup() {
         body: JSON.stringify({
             name,
             surname,
+            username,
             password
         })
     })
